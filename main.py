@@ -270,7 +270,7 @@ parser.add_argument("-d", "--database-id", help="working space id, column names 
 parser.add_argument("-t", "--task-kind", default="daily productivity", help="enables to categorize page task")
 parser.add_argument("-u", "--update-remaining-day", action="store_true", help="updates remaining day column, which shows the remaining day of task")
 parser.add_argument("-a", "--arrange-priorities", action="store_true", help="set `overdue`as a priority if you miss the deadline of tasks")
-parser.add_argument("--version", action="version", version="notion-create-page 1.0.0 by İlker M. Sıtkı")
+parser.add_argument("--version", action="version", version="notion-cli 1.0.0 by İlker M. Sıtkı")
 args = parser.parse_args()
 
 if args.database_id:
