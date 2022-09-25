@@ -3,6 +3,7 @@
 import requests
 import json
 from datetime import datetime, timezone, timedelta, date
+from columnar import columnar # for tabular formatting of the output. In the future, write your own method.
 import argparse
 import os
 
@@ -256,6 +257,29 @@ def arrange_priorities():
                 update_priority_of_page(page["id"], "⚠Overdue⚠")
 
 
+def list_database():
+    """print stdout the tasks that is not completed."""
+    headers = ["Name of The Task", "Status", "Priority", "Task Kind", "Working Type", "Remaining Day", "Date"]
+    frame = []
+    for page in read_database_pages(DATABASE_ID)["results"]:
+        properties = page["properties"]
+        status = properties["Status"]["select"]["name"]
+        if status != "Completed":
+            name_of_the_task = properties["Name of the Task"]["title"][0]["plain_text"]
+            priority = properties["Priority"]["select"]["name"]
+            # consider color option later.
+            task_kinds = [ms_dict["name"] for ms_dict in properties["Task Kind"]["multi_select"]]
+            task_kinds_joined = "\n".join(task_kinds)
+            working_type = properties["Working Type"]["select"]["name"]
+            try:
+                remaining_day = float(properties["Remaining Day"]["number"])
+            except TypeError:
+                print("please update the remaining day column first")
+            date = properties["Date"]["date"]["start"]
+            frame.append([name_of_the_task, status, priority, task_kinds_joined, working_type, remaining_day, date])
+    frame.sort(key=lambda row: row[5])
+    print(columnar(frame, headers, no_borders=True))
+
 parser = argparse.ArgumentParser(
     description="Enables you to loosely interact with tokenized databases in notion.",
     formatter_class=argparse.ArgumentDefaultsHelpFormatter
@@ -270,6 +294,7 @@ parser.add_argument("-d", "--database-id", help="working space id, column names 
 parser.add_argument("-t", "--task-kind", default="daily productivity", help="enables to categorize page task")
 parser.add_argument("-u", "--update-remaining-day", action="store_true", help="updates remaining day column, which shows the remaining day of task")
 parser.add_argument("-a", "--arrange-priorities", action="store_true", help="set `overdue`as a priority if you miss the deadline of tasks")
+parser.add_argument("-l", "--list", action="store_true")
 parser.add_argument("--version", action="version", version="notion-cli 1.0.0 by İlker M. Sıtkı")
 args = parser.parse_args()
 
@@ -293,3 +318,5 @@ if args.title:
         status_name=args.status_name,
         task_kind=args.task_kind
     )
+if args.list:
+    list_database()
