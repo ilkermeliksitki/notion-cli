@@ -6,6 +6,7 @@ from datetime import datetime, timezone, timedelta, date
 from columnar import columnar # for tabular formatting of the output. In the future, write your own method.
 import argparse
 import os
+import math
 
  # id of access-gained notion-database.
 DATABASE_ID = os.environ["NOTIONDATABASEID"]
@@ -234,6 +235,39 @@ def update_priority_of_page(page_id, name_of_priority):
     r = requests.patch(url, data=data, headers=HEADERS)
     # print(r.json())
 
+def change_date_by(n):
+    """increment or decrement the date by the amount of n for all non-completed tasks."""
+    pages = []
+    for page in read_database_pages(DATABASE_ID)["results"]:
+        select_of_status_of_page = page["properties"]["Status"]["select"]
+        if select_of_status_of_page:
+            if select_of_status_of_page["name"] != "Completed":
+                pages.append(page)
+        else:
+            pages.append(page)
+    
+    for page in pages:
+        curr_date = date.fromisoformat(page["properties"]["Date"]["date"]["start"])
+        url = f"https://api.notion.com/v1/pages/{page['id']}"
+        data = {
+            "properties" : {
+                    "Date" : {
+                        "date" : {
+                            "start" : ( curr_date + timedelta(days=n) ).isoformat()
+                        }
+                    }
+            }
+        }
+        data = json.dumps(data)
+        r = requests.patch(url, headers=HEADERS, data=data)
+        name_of_the_task = page['properties']['Name of the Task']['title'][0]['plain_text']
+        if r.status_code == 200:
+            if n > 0:
+                print(f"date is incremented by {n} -> {name_of_the_task}")
+            else:
+                print(f"date is decremented by {abs(n)} -> {name_of_the_task}")
+        else:
+            print(f"something went wrong\n{r.json()}")
 
 def arrange_priorities():
     """This function set "overdue" priority if you miss the deadline of an event whose status is not "Completed"."""
@@ -254,7 +288,6 @@ def arrange_priorities():
         remaining_day = page["properties"]["Remaining Day"]
         if (status_of_page is not None) and (remaining_day is not None):
             if (remaining_day["number"] < 0) and (status_of_page["name"] != "Completed"):
-                # Set its priority as 🔥High
                 update_priority_of_page(page["id"], "⚠Overdue⚠")
 
 
@@ -296,6 +329,7 @@ parser.add_argument("-t", "--task-kind", default="daily productivity", help="ena
 parser.add_argument("-u", "--update-remaining-day", action="store_true", help="updates remaining day column, which shows the remaining day of task")
 parser.add_argument("-a", "--arrange-priorities", action="store_true", help="set `overdue`as a priority if you miss the deadline of tasks")
 parser.add_argument("-l", "--list", action="store_true")
+parser.add_argument("--change-date")
 parser.add_argument("--version", action="version", version="notion-cli 1.0.0 by İlker M. Sıtkı")
 args = parser.parse_args()
 
@@ -319,5 +353,11 @@ if args.title:
         status_name=args.status_name,
         task_kind=args.task_kind
     )
+
 if args.list:
     list_database()
+
+if args.change_date:
+    change_date_by(int(args.change_date))
+    print('done.')
+
