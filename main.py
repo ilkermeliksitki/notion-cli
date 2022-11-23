@@ -298,7 +298,7 @@ def list_database():
     for page in read_database_pages(DATABASE_ID)["results"]:
         properties = page["properties"]
         status = properties["Status"]["select"]["name"]
-        if status != "Completed":
+        if status != "Completed" and status != "Incomplete":
             name_of_the_task = properties["Name of the Task"]["title"][0]["plain_text"]
             priority = properties["Priority"]["select"]["name"]
             # consider color option later.
