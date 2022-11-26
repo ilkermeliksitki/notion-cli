@@ -225,24 +225,6 @@ def update_remaining_day():
             print(f"Updated remaining day of {page_task_name(page)}")
 
 
-def update_priority_of_page(page_id, name_of_priority):
-    """helper function for priority setter"""
-    url = f"https://api.notion.com/v1/pages/{page_id}"
-    data = {
-        "properties": {
-            "Priority": {
-                "type": "select",
-                "select": {
-                    "name": name_of_priority
-                }
-            }
-        }
-    }
-    data = json.dumps(data)
-    r = requests.patch(url, data=data, headers=HEADERS)
-    # print(r.json())
-
-
 def change_date_by(n):
     """increment or decrement the date by the amount of n for all non-completed tasks."""
     pages = filter_pages()
@@ -268,6 +250,24 @@ def change_date_by(n):
                 print(f"date is decremented by {abs(n)} -> {name_of_the_task}")
         else:
             print(f"something went wrong\n{r.json()}")
+
+
+def update_priority_of_page(page_id, name_of_priority):
+    """helper function for priority setter"""
+    url = f"https://api.notion.com/v1/pages/{page_id}"
+    data = {
+        "properties": {
+            "Priority": {
+                "type": "select",
+                "select": {
+                    "name": name_of_priority
+                }
+            }
+        }
+    }
+    data = json.dumps(data)
+    r = requests.patch(url, data=data, headers=HEADERS)
+    # print(r.json())
 
 
 def arrange_priorities():
