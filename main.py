@@ -286,27 +286,27 @@ def arrange_priorities():
 
 
 def list_database():
-    """print stdout the tasks that is not completed."""
+    """print stdout the filtered tasks"""
     headers = ["Name of The Task", "Status", "Priority", "Task Kind", "Working Type", "Remaining Day", "Date"]
     frame = []
-    for page in read_database_pages(DATABASE_ID)["results"]:
+    pages = filter_pages()
+    for page in pages:
+        name_of_the_task = page_task_name(page) 
         properties = page["properties"]
         status = properties["Status"]["select"]["name"]
-        if status != "Completed" and status != "Incomplete":
-            name_of_the_task = properties["Name of the Task"]["title"][0]["plain_text"]
-            priority = properties["Priority"]["select"]["name"]
-            # consider color option later.
-            task_kinds = [ms_dict["name"] for ms_dict in properties["Task Kind"]["multi_select"]]
-            task_kinds_joined = "\n".join(task_kinds)
-            working_type = properties["Working Type"]["select"]["name"]
-            try:
-                remaining_day = float(properties["Remaining Day"]["number"])
-            except TypeError:
-                print("please update the remaining day column first")
-            date = properties["Date"]["date"]["start"]
-            frame.append([name_of_the_task, status, priority, task_kinds_joined, working_type, remaining_day, date])
+        priority = properties["Priority"]["select"]["name"]
+        task_kinds = [ms_dict["name"] for ms_dict in properties["Task Kind"]["multi_select"]]
+        task_kinds_joined = "\n".join(task_kinds)
+        working_type = properties["Working Type"]["select"]["name"]
+        try:
+            remaining_day = float(properties["Remaining Day"]["number"])
+        except TypeError:
+            print("please update the remaining day column of {name_of_the_task}")
+        date = properties["Date"]["date"]["start"]
+        frame.append([name_of_the_task, status, priority, task_kinds_joined, working_type, remaining_day, date])
     frame.sort(key=lambda row: row[5])
     print(columnar(frame, headers, no_borders=True))
+
 
 parser = argparse.ArgumentParser(
     description="Enables you to loosely interact with tokenized databases in notion.",
