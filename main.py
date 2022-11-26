@@ -36,15 +36,15 @@ ICON_DICT = {
 def write_notion_to_json_file(pseudo_json, name_of_the_file="temp"):
     """helper function for read_database_pages and read_database."""
     json_data = json.loads(pseudo_json)
-    # with open(name_of_the_file + ".json", "w", encoding="utf-8") as fh:
-    #     json.dump(json_data, fh, indent=4)
+    with open(name_of_the_file + ".json", "w", encoding="utf-8") as fh:
+        json.dump(json_data, fh, indent=4)
     return json_data
 
 
 def read_database_pages(database_id):
     url = f"https://api.notion.com/v1/databases/{database_id}/query"
     r = requests.post(url, headers=HEADERS)
-    write_notion_to_json_file(r.text, "read_database_pages")
+    #write_notion_to_json_file(r.text, "read_database_pages")
     return r.json()
 
 
