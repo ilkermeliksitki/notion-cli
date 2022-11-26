@@ -277,11 +277,11 @@ def arrange_priorities():
     # number of API calls.
     pages = filter_pages()
     for page in pages:
-        status_of_page = page["properties"]["Status"]["select"]
         remaining_day = page["properties"]["Remaining Day"]
-        if (status_of_page is not None) and (remaining_day is not None):
-            if (remaining_day["number"] < 0) and (status_of_page["name"] != "Completed"):
-                update_priority_of_page(page["id"], "⚠Overdue⚠")
+        priority_of_page = page["properties"]["Priority"]["select"]["name"]
+        if remaining_day is not None and remaining_day["number"] < 0 and priority_of_page != "⚠Overdue⚠":
+            update_priority_of_page(page["id"], "⚠Overdue⚠")
+            print(f"changed priority of {page_task_name(page)}")
 
 
 def list_database():
