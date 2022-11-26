@@ -252,8 +252,9 @@ def change_date_by(n):
             print(f"something went wrong\n{r.json()}")
 
 
-def update_priority_of_page(page_id, name_of_priority):
+def update_priority_of_page(page, name_of_priority):
     """helper function for priority setter"""
+    page_id = page["id"]
     url = f"https://api.notion.com/v1/pages/{page_id}"
     data = {
         "properties": {
@@ -280,7 +281,7 @@ def arrange_priorities():
         remaining_day = page["properties"]["Remaining Day"]
         priority_of_page = page["properties"]["Priority"]["select"]["name"]
         if remaining_day is not None and remaining_day["number"] < 0 and priority_of_page != "⚠Overdue⚠":
-            update_priority_of_page(page["id"], "⚠Overdue⚠")
+            update_priority_of_page(page, "⚠Overdue⚠")
             print(f"changed priority of {page_task_name(page)}")
 
 
