@@ -48,7 +48,7 @@ def read_database_pages(database_id):
     return r.json()
 
 
-def filter_pages(di=DATABASE_I, flags=None):
+def filter_pages(di=DATABASE_ID, flags=None):
     pages = []
     for page in read_database_pages(di)["results"]:
         select_of_status_of_page = page["properties"]["Status"]["select"]
@@ -57,7 +57,8 @@ def filter_pages(di=DATABASE_I, flags=None):
                 pages.append(page)
     return pages
 
-def page_name(page):
+
+def page_task_name(page):
     return page['properties']['Name of the Task']['title'][0]['plain_text']
 
 
@@ -221,6 +222,7 @@ def update_remaining_day():
                 data = json.dumps(data)
                 r = requests.patch(url, headers=HEADERS, data=data)
                 # print(r.json())
+            print(f"Updated remaining day of {page_task_name(page)}")
 
 
 def update_priority_of_page(page_id, name_of_priority):
@@ -258,7 +260,7 @@ def change_date_by(n):
         }
         data = json.dumps(data)
         r = requests.patch(url, headers=HEADERS, data=data)
-        name_of_the_task = page_name(page)
+        name_of_the_task = page_task_name(page)
         if r.status_code == 200:
             if n > 0:
                 print(f"date is incremented by {n} -> {name_of_the_task}")
@@ -273,7 +275,7 @@ def arrange_priorities():
 
     # This part filters the pages whose status is not equal to "Completed" or "None", reducing computational weight and
     # number of API calls.
-    pages = filter_pages():
+    pages = filter_pages()
     for page in pages:
         status_of_page = page["properties"]["Status"]["select"]
         remaining_day = page["properties"]["Remaining Day"]
