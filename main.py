@@ -32,6 +32,8 @@ ICON_DICT = {
     "linux": "https://i.imgur.com/PBzqSEO.png"
 }
 
+class EmptyFieldError(Exception):
+    pass
 
 def write_notion_to_json_file(pseudo_json, name_of_the_file="temp"):
     """helper function for read_database_pages and read_database."""
@@ -301,7 +303,9 @@ def list_database():
         try:
             remaining_day = float(properties["Remaining Day"]["number"])
         except TypeError:
-            print(f"please update the remaining day column of {name_of_the_task}")
+            internal = EmptyFieldError(f"please update the remaining day column of \"{name_of_the_task}\"")
+            internal.__suppress_context__ = True
+            raise internal
         date = properties["Date"]["date"]["start"]
         frame.append([name_of_the_task, status, priority, task_kinds_joined, working_type, remaining_day, date])
     frame.sort(key=lambda row: row[5])
