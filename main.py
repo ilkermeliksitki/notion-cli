@@ -301,7 +301,7 @@ def list_database():
         try:
             remaining_day = float(properties["Remaining Day"]["number"])
         except TypeError:
-            print("please update the remaining day column of {name_of_the_task}")
+            print(f"please update the remaining day column of {name_of_the_task}")
         date = properties["Date"]["date"]["start"]
         frame.append([name_of_the_task, status, priority, task_kinds_joined, working_type, remaining_day, date])
     frame.sort(key=lambda row: row[5])
