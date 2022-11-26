@@ -48,6 +48,19 @@ def read_database_pages(database_id):
     return r.json()
 
 
+def filter_pages(di=DATABASE_I, flags=None):
+    pages = []
+    for page in read_database_pages(di)["results"]:
+        select_of_status_of_page = page["properties"]["Status"]["select"]
+        if select_of_status_of_page:
+            if select_of_status_of_page["name"] != "Completed" and select_of_status_of_page["name"] != "Incomplete":
+                pages.append(page)
+    return pages
+
+def page_name(page):
+    return page['properties']['Name of the Task']['title'][0]['plain_text']
+
+
 def read_database(database_id):
     url = f"https://api.notion.com/v1/databases/{database_id}"
     r = requests.get(url, headers=HEADERS)
@@ -160,15 +173,7 @@ def update_remaining_day():
 
     # This part filters the pages whose status is not equal to "Completed" or "None", reducing computational weight and
     # number of API calls.
-    pages = []
-    for page in read_database_pages(DATABASE_ID)["results"]:
-        select_of_status_of_page = page["properties"]["Status"]["select"]
-        if select_of_status_of_page:
-            if select_of_status_of_page["name"] != "Completed":
-                pages.append(page)
-        else:
-            pages.append(page)
-
+    pages = filter_pages()
     for page in pages:
         date = page["properties"]["Date"]
         if date["date"]:
@@ -235,17 +240,10 @@ def update_priority_of_page(page_id, name_of_priority):
     r = requests.patch(url, data=data, headers=HEADERS)
     # print(r.json())
 
+
 def change_date_by(n):
     """increment or decrement the date by the amount of n for all non-completed tasks."""
-    pages = []
-    for page in read_database_pages(DATABASE_ID)["results"]:
-        select_of_status_of_page = page["properties"]["Status"]["select"]
-        if select_of_status_of_page:
-            if select_of_status_of_page["name"] != "Completed":
-                pages.append(page)
-        else:
-            pages.append(page)
-    
+    pages = filter_pages()
     for page in pages:
         curr_date = date.fromisoformat(page["properties"]["Date"]["date"]["start"])
         url = f"https://api.notion.com/v1/pages/{page['id']}"
@@ -260,7 +258,7 @@ def change_date_by(n):
         }
         data = json.dumps(data)
         r = requests.patch(url, headers=HEADERS, data=data)
-        name_of_the_task = page['properties']['Name of the Task']['title'][0]['plain_text']
+        name_of_the_task = page_name(page)
         if r.status_code == 200:
             if n > 0:
                 print(f"date is incremented by {n} -> {name_of_the_task}")
@@ -269,20 +267,13 @@ def change_date_by(n):
         else:
             print(f"something went wrong\n{r.json()}")
 
+
 def arrange_priorities():
     """This function set "overdue" priority if you miss the deadline of an event whose status is not "Completed"."""
 
     # This part filters the pages whose status is not equal to "Completed" or "None", reducing computational weight and
     # number of API calls.
-    pages = []
-    for page in read_database_pages(DATABASE_ID)["results"]:
-        select_of_status_of_page = page["properties"]["Status"]["select"]
-        if select_of_status_of_page:
-            if select_of_status_of_page["name"] != "Completed":
-                pages.append(page)
-        else:
-            pages.append(page)
-
+    pages = filter_pages():
     for page in pages:
         status_of_page = page["properties"]["Status"]["select"]
         remaining_day = page["properties"]["Remaining Day"]
@@ -338,11 +329,11 @@ if args.database_id:
 
 if args.update_remaining_day:
     update_remaining_day()
-    print("remaining days updated")
+    print("remaining days updated.")
 
 if args.arrange_priorities:
     arrange_priorities()
-    print("priorities arranged")    
+    print("priorities arranged.")    
 
 if args.title:
     create_a_page(
