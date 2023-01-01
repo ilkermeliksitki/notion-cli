@@ -141,7 +141,7 @@ def create_a_page(
             },
             "Task Kind": {
                 "type": "multi_select",
-                "multi_select": [{"name": task_kind.title()}]
+                "multi_select": [{"name": task_kind}]
             },
             "Tag": {
                 "type": "select",
