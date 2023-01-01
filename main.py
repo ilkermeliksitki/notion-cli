@@ -102,7 +102,7 @@ def create_a_database(database_name, database_id="49a783fcd2c34f86884beb08012b30
 def create_a_page(
         title: str,
         priority,
-        working_type,
+        tag,
         database_id,
         status_name,
         task_kind
@@ -146,7 +146,7 @@ def create_a_page(
             "Tag": {
                 "type": "select",
                 "select": {
-                    "name": working_type.title()
+                    "name": tag.title()
                 }
             },
             "Priority": {
@@ -346,7 +346,7 @@ if args.title:
     create_a_page(
         title=args.title,
         priority=args.priority,
-        working_type=args.working_type,
+        tag=args.tag,
         database_id=DATABASE_ID,
         status_name=args.status_name,
         task_kind=args.task_kind
