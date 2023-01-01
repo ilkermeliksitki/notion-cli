@@ -320,7 +320,7 @@ parser = argparse.ArgumentParser(
 # subparsers = parser.add
 parser.add_argument("title", nargs="?", help="title of page")
 parser.add_argument("-p","--priority", choices=["low", "medium", "high", "overdue"], default="medium", help="sets priority of page")
-parser.add_argument("-w", "--working-type", default="study", help="sets working type")
+parser.add_argument("-t", "--tag", default="study", help="sets tag name of the task")
 parser.add_argument("-s", "--status-name", default="not started", help="status of task")
 parser.add_argument("-d", "--database-id", help="working space id, column names and types should be same.")
 parser.add_argument("-k", "--task-kind", default="daily productivity", help="enables to categorize page task")
