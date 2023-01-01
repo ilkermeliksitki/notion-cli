@@ -130,7 +130,7 @@ def create_a_page(
             "Status": {
                 "type": "select",
                 "select": {
-                    "name": status_name.title()
+                    "name": status_name
                 }
             },
             "Date": {
@@ -150,7 +150,7 @@ def create_a_page(
             "Priority": {
                 "type": "select",
                 "select": {
-                    "name": priority.title()
+                    "name": priority
                 }
             }
         },
