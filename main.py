@@ -296,8 +296,9 @@ def list_database():
         status = properties["Status"]["select"]["name"]
         priority = properties["Priority"]["select"]["name"]
         task_kinds = [ms_dict["name"] for ms_dict in properties["Task Kind"]["multi_select"]]
-        task_kinds_joined = "\n".join(task_kinds)
-        working_type = properties["Tag"]["select"]["name"]
+        task_kinds_joined = '\n'.join(task_kinds)
+        tags = [t_dict['name'] for t_dict in properties['Tag']['multi_select']]
+        tags_joined = '\n'.join(tags)
         try:
             remaining_day = float(properties["Remaining Day"]["number"])
         except TypeError:
@@ -305,7 +306,7 @@ def list_database():
             internal.__suppress_context__ = True
             raise internal
         date = properties["Date"]["date"]["start"]
-        frame.append([name_of_the_task, status, priority, task_kinds_joined, working_type, remaining_day, date])
+        frame.append([name_of_the_task, status, priority, task_kinds_joined, tags_joined, remaining_day, date])
     frame.sort(key=lambda row: row[5])
     print(columnar(frame, headers, no_borders=True))
 
