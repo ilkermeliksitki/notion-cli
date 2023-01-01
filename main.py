@@ -146,7 +146,7 @@ def create_a_page(
             "Tag": {
                 "type": "select",
                 "select": {
-                    "name": tag.title()
+                    "name": tag
                 }
             },
             "Priority": {
