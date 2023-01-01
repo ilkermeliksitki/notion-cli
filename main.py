@@ -143,7 +143,7 @@ def create_a_page(
                 "type": "multi_select",
                 "multi_select": [{"name": task_kind.title()}]
             },
-            "Working Type": {
+            "Tag": {
                 "type": "select",
                 "select": {
                     "name": working_type.title()
@@ -289,7 +289,7 @@ def arrange_priorities():
 
 def list_database():
     """print stdout the filtered tasks"""
-    headers = ["Name of The Task", "Status", "Priority", "Task Kind", "Working Type", "Remaining Day", "Date"]
+    headers = ["Name of The Task", "Status", "Priority", "Task Kind", "Tag", "Remaining Day", "Date"]
     frame = []
     pages = filter_pages()
     for page in pages:
@@ -299,7 +299,7 @@ def list_database():
         priority = properties["Priority"]["select"]["name"]
         task_kinds = [ms_dict["name"] for ms_dict in properties["Task Kind"]["multi_select"]]
         task_kinds_joined = "\n".join(task_kinds)
-        working_type = properties["Working Type"]["select"]["name"]
+        working_type = properties["Tag"]["select"]["name"]
         try:
             remaining_day = float(properties["Remaining Day"]["number"])
         except TypeError:
