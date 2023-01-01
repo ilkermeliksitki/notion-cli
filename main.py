@@ -55,7 +55,7 @@ def filter_pages(di=DATABASE_ID, flags=None):
     for page in read_database_pages(di)["results"]:
         select_of_status_of_page = page["properties"]["Status"]["select"]
         if select_of_status_of_page:
-            if select_of_status_of_page["name"] != "Completed" and select_of_status_of_page["name"] != "Incomplete":
+            if select_of_status_of_page["name"] != "completed" and select_of_status_of_page["name"] != "incomplete":
                 pages.append(page)
     return pages
 
