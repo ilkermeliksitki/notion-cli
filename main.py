@@ -144,10 +144,8 @@ def create_a_page(
                 "multi_select": [{"name": task_kind}]
             },
             "Tag": {
-                "type": "select",
-                "select": {
-                    "name": tag
-                }
+                "type": "multi_select",
+                "multi_select": [{"name": tag}]
             },
             "Priority": {
                 "type": "select",
