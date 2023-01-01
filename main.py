@@ -280,7 +280,7 @@ def arrange_priorities():
     for page in pages:
         remaining_day = page["properties"]["Remaining Day"]
         priority_of_page = page["properties"]["Priority"]["select"]["name"]
-        if remaining_day is not None and remaining_day["number"] < 0 and priority_of_page != "⚠Overdue⚠":
+        if remaining_day is not None and remaining_day["number"] < 0 and priority_of_page != "⚠overdue⚠":
             update_priority_of_page(page, "⚠Overdue⚠")
             print(f"changed priority of {page_task_name(page)}")
 
