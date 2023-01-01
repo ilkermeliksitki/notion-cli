@@ -61,7 +61,7 @@ def filter_pages(di=DATABASE_ID, flags=None):
 
 
 def page_task_name(page):
-    return page['properties']['Name of the Task']['title'][0]['plain_text']
+    return page['properties']['Task Name']['title'][0]['plain_text']
 
 
 def read_database(database_id):
@@ -118,7 +118,7 @@ def create_a_page(
             "database_id": database_id
         },
         "properties": {
-            "Name of the Task": {
+            "Task Name": {
                 "title": [
                     {
                         "text": {
@@ -289,7 +289,7 @@ def arrange_priorities():
 
 def list_database():
     """print stdout the filtered tasks"""
-    headers = ["Name of The Task", "Status", "Priority", "Task Kind", "Tag", "Remaining Day", "Date"]
+    headers = ["Task Name", "Status", "Priority", "Task Kind", "Tag", "Remaining Day", "Date"]
     frame = []
     pages = filter_pages()
     for page in pages:
