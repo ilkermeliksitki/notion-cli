@@ -55,7 +55,7 @@ def filter_pages(di=DATABASE_ID, flags=None):
     for page in read_database_pages(di)["results"]:
         select_of_status_of_page = page["properties"]["Status"]["select"]
         if select_of_status_of_page:
-            if select_of_status_of_page["name"] != "completed" and select_of_status_of_page["name"] != "incomplete":
+            if select_of_status_of_page["name"] != "done" and select_of_status_of_page["name"] != "incomplete":
                 pages.append(page)
     return pages
 
@@ -172,7 +172,7 @@ def create_a_page(
 def update_remaining_day():
     """This function update the duration column of Daily Task Table."""
 
-    # This part filters the pages whose status is not equal to "Completed" or "None", reducing computational weight and
+    # This part filters the pages whose status is not equal to "done" or "None", reducing computational weight and
     # number of API calls.
     pages = filter_pages()
     for page in pages:
@@ -272,9 +272,9 @@ def update_priority_of_page(page, name_of_priority):
 
 
 def arrange_priorities():
-    """This function set "overdue" priority if you miss the deadline of an event whose status is not "Completed"."""
+    """This function set "overdue" priority if you miss the deadline of an event whose status is not "done"."""
 
-    # This part filters the pages whose status is not equal to "Completed" or "None", reducing computational weight and
+    # This part filters the pages whose status is not equal to "done" or "None", reducing computational weight and
     # number of API calls.
     pages = filter_pages()
     for page in pages:
