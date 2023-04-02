@@ -22,6 +22,7 @@ HEADERS = {
 # if title = "coursera-aws" -> icon_url = "https://i.imgur.com/pm8bgGc.png" etc.
 # the default one is linux in case of any key is not being found.
 ICON_DICT = { 
+    "health": "https://i.imgur.com/N5gAsLS.png",
     "harvard": "https://i.imgur.com/dN0vZaD.png",
     "cambly": "https://i.imgur.com/BEF4H69.png",
     "writing": "https://i.imgur.com/PweWx2n.png",
