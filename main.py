@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/home/melik/Documents/projects/notion-cli/venv/bin/python3
 
 import requests
 import json
