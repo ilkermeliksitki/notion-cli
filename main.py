@@ -172,7 +172,7 @@ def create_a_page(
     data = json.dumps(data)
     r = requests.post(url, headers=HEADERS, data=data)
     if r.status_code == 200:
-        print(f"{title} <- page is successfully created.")
+        print(f"{title} <= page is successfully created.")
     else:
         print(r.json())
         
